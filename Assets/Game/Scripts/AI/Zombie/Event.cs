@@ -8,24 +8,17 @@ namespace Game.Scripts.AI.Zombie
 {
     public class Event : MonoBehaviour
     {
+        [SerializeField] private Object Collider;
 
-        [SerializeField]private Object[] Colliders;
-        
         public void ATK_CollisionEnable()
         {
-            foreach (Object o in Colliders)
-            {
-                SoundManager.Instance.PlaySound("Attack");
-                o.GetComponent<SphereCollider>().enabled = true;
-            }
+            SoundManager.Instance.PlaySound("Attack");
+            Collider.GetComponent<BoxCollider>().enabled = true;
         }
 
         public void ATK_CollisionDisable()
         {
-            foreach (Object o in Colliders)
-            {
-                o.GetComponent<SphereCollider>().enabled = false;
-            }
+            Collider.GetComponent<BoxCollider>().enabled = false;
         }
     }
 }

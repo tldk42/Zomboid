@@ -6,11 +6,19 @@ using Object = UnityEngine.Object;
 
 namespace Game.Scripts.AI.Zombie
 {
+    public enum ZombieState
+    {
+        EZS_PATROLLING, // 돌아다니는 상태
+        EZS_RECOGNIZED, // 상대를 이미 인식한 상태
+        EZS_CHASING, // 쫓는 상태
+    }
+    
     public class Zombie : MonoBehaviour
     {
         public ZombieData Data;
         public Transform SensorTransform;
         public NavMeshAgent NavMeshAgent;
+        public ZombieState State;
         [SerializeField, ReadOnly, InspectorName("타켓")]public Transform TargetData;
 
         private void Awake()

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Game.Scripts.Core.Inspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 // ReSharper disable once InvalidXmlDocComment
 /**
@@ -22,15 +21,13 @@ namespace Game.Scripts.AI.BT.Core
     [Serializable]
     public class Node
     {
-        [SerializeField] private string Name;
-
         /** 이 노드의 상태 */
-        [SerializeField] protected NodeState State;
+        protected NodeState State;
 
         /** 부모 및 자식 노드 */
-        public Node Parent;
+        [HideInInspector]public Node Parent;
 
-        [SerializeField] protected List<Node> Children = new List<Node>();
+        protected List<Node> Children = new List<Node>();
 
         /** 이 노드의 추가 정보 (Target등) */
         private SerializableDictionary<string, object> _DataContext = new SerializableDictionary<string, object>();
@@ -38,19 +35,11 @@ namespace Game.Scripts.AI.BT.Core
 
         public Node()
         {
-            Name = null;
-            Parent = null;
-        }
-
-        public Node(string name)
-        {
-            Name = name;
             Parent = null;
         }
 
         public Node(string name, List<Node> children)
         {
-            Name = name;
             foreach (var child in children)
             {
                 _Attach(child);

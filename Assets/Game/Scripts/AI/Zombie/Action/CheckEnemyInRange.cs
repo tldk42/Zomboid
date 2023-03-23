@@ -28,7 +28,7 @@ namespace Game.Scripts.AI.Zombie.Action
         #endregion
 
 
-        public CheckEnemyInRange(Transform transform) : base("Check Enemy")
+        public CheckEnemyInRange(Transform transform) : base()
         {
             _Owner = transform.GetComponent<ZombieBT>().Owner;
             _Animator = transform.GetComponent<Animator>();
@@ -37,6 +37,8 @@ namespace Game.Scripts.AI.Zombie.Action
 
         public override NodeState Evaluate()
         {
+            _Animator.SetBool(CanAttack, false);
+            
             var colliders = new Collider[1];
 
             Physics.OverlapSphereNonAlloc(_Owner.SensorTransform.position, _Owner.Data.FOVRange, colliders,
@@ -45,10 +47,16 @@ namespace Game.Scripts.AI.Zombie.Action
 
             if (colliders[0] == null)
             {
-                Debug.Log("No Detection");
+                _Owner.State = ZombieState.EZS_PATROLLING;
                 Parent.Parent.SetData("Target", null);
                 _Owner.TargetData = null;
                 State = NodeState.ENS_FAILURE;
+                return State;
+            }
+            
+            if (_Owner.State == ZombieState.EZS_RECOGNIZED)
+            {
+                State = NodeState.ENS_SUCCESS;
                 return State;
             }
 
@@ -60,7 +68,9 @@ namespace Game.Scripts.AI.Zombie.Action
                 State = NodeState.ENS_FAILURE;
                 return State;
             }
+            
             Parent.Parent.SetData("Target", colliders[0].transform);
+            _Owner.State = ZombieState.EZS_RECOGNIZED;
             _Owner.TargetData = colliders[0].transform;
             _Animator.SetBool(ShouldMove, true);
             _Animator.SetBool(CanAttack, false);

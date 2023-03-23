@@ -30,7 +30,7 @@ namespace Game.Scripts.AI.Zombie.Action
 
         #endregion
 
-        public TaskPatrol(Transform transform, Transform[] wayPoints) : base("Patrol")
+        public TaskPatrol(Transform transform, Transform[] wayPoints) : base()
         {
             _Owner = transform.GetComponent<ZombieBT>().Owner;
             _Animator = transform.GetComponent<Animator>();
@@ -50,6 +50,7 @@ namespace Game.Scripts.AI.Zombie.Action
                 _WaitCounter += Time.deltaTime;
                 if (_WaitCounter >= _WaitTime)
                 {
+                    _Owner.NavMeshAgent.isStopped = false;
                     _IsWaiting = false;
                     _Animator.SetBool(ShouldMove, true);
                 }
@@ -57,9 +58,10 @@ namespace Game.Scripts.AI.Zombie.Action
             else
             {
                 Vector3 waypointPosition = _WayPoints[_CurrentWaypointIndex].position;
-                if (Vector3.Distance(_Transform.position, waypointPosition) < _Owner.NavMeshAgent.stoppingDistance)
+                if (Vector3.Distance(_Transform.position, waypointPosition) <= _Owner.NavMeshAgent.stoppingDistance)
                 {
                     // _Transform.position = waypointPosition;
+                    _Owner.NavMeshAgent.isStopped = true;
                     _WaitCounter = 0f;
                     _IsWaiting = true;
 
@@ -71,10 +73,12 @@ namespace Game.Scripts.AI.Zombie.Action
                 {
                     _Owner.NavMeshAgent.SetDestination(waypointPosition);
                     _Animator.SetBool(ShouldMove, true);
-                    _Transform.LookAt(waypointPosition);
+                    _Transform.LookAt(new Vector3(waypointPosition.x, _Transform.position.y, waypointPosition.z)
+                    );
                 }
             }
 
+            _Owner.State = ZombieState.EZS_PATROLLING;
             State = NodeState.ENS_RUNNING;
             return State;
         }

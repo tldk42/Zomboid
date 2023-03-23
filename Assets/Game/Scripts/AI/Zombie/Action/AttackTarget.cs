@@ -22,7 +22,7 @@ namespace Game.Scripts.AI.Zombie.Action
 
         #endregion
         
-        public AttackTarget(Transform transform) : base("Attack Target")
+        public AttackTarget(Transform transform) : base()
         {
             _Transform = transform;
             _Owner = transform.GetComponent<ZombieBT>().Owner;
@@ -40,7 +40,7 @@ namespace Game.Scripts.AI.Zombie.Action
             }
             
             _Animator.SetBool(CanAttack, true);
-            _Animator.SetBool(ShouldMove, false);
+            // _Animator.SetBool(ShouldMove, false);
 
             State = NodeState.ENS_SUCCESS;
             return State;

@@ -13,7 +13,7 @@ namespace Game.Scripts.AI.Zombie.Action
 
         #endregion
 
-        public ChaseTarget( Transform transform) : base("Chase")
+        public ChaseTarget( Transform transform) : base()
         {
             _Owner = transform.GetComponent<Zombie>();
             _Transform = transform;
@@ -25,10 +25,10 @@ namespace Game.Scripts.AI.Zombie.Action
         {
             Transform targetTransform = (Transform)GetData("Target");
             Vector3 targetPosition = targetTransform.position;
-            if (Vector3.Distance(_Transform.position, targetPosition) > _Owner.Data.AttackRange)
+            if (Vector3.Distance(_Transform.position, targetPosition) >= _Owner.Data.AttackRange)
             {
                 _Owner.NavMeshAgent.SetDestination(targetPosition);
-                _Transform.LookAt(targetPosition);
+                _Transform.LookAt(new Vector3(targetPosition.x, _Transform.position.y ,targetPosition.z));
             }
 
             State = NodeState.ENS_RUNNING;

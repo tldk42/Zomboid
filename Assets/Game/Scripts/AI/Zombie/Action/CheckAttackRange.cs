@@ -21,7 +21,7 @@ namespace Game.Scripts.AI.Zombie.Action
 
         #endregion
 
-        public CheckAttackRange(Transform transform) : base("Check Attack Range")
+        public CheckAttackRange(Transform transform) : base()
         {
             _Transform = transform;
             _Owner = transform.GetComponent<ZombieBT>().Owner;
@@ -41,11 +41,8 @@ namespace Game.Scripts.AI.Zombie.Action
 
             Vector3 targetPosition = ((Transform)targetPlayer).position;
 
-            if (Vector3.Distance(_Transform.position, targetPosition) <= _Owner.Data.AttackRange + float.Epsilon)
+            if (Vector2.Distance(new Vector2(_Transform.position.x, _Transform.position.z), new Vector2(targetPosition.x, targetPosition.z)) <= _Owner.Data.AttackRange + float.Epsilon)
             {
-                // _Owner.NavMeshAgent.enabled = false;
-                // _Animator.SetBool(ShouldMove, false);
-
                 State = NodeState.ENS_SUCCESS;
                 return State;
             }

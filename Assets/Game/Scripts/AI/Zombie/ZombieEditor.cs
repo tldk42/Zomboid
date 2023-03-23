@@ -17,7 +17,7 @@ namespace Game.Scripts.AI.Zombie
 
         private void OnSceneGUI()
         {
-            Handles.color = Color.blue;
+            Handles.color = Color.Lerp(Color.yellow, Color.red, 0.35f);
 
             for (var i = 0; i < _BtWayPoint.WayPoints.Length; ++i)
             {

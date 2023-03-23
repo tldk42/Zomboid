@@ -7,8 +7,8 @@ namespace Game.Scripts.Core.Inspector
     [System.Serializable]
     public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
     {
-        [SerializeField] private List<TKey> Keys = new List<TKey>();
-        [SerializeField] private List<TValue> Values = new List<TValue>();
+        [SerializeField] private new List<TKey> Keys = new List<TKey>();
+        [SerializeField] private new List<TValue> Values = new List<TValue>();
 
         public void OnBeforeSerialize()
         {
