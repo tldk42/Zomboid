@@ -37,6 +37,7 @@ namespace Game.Scripts.AI.Zombie.Action
 
         public override NodeState Evaluate()
         {
+            _Owner.NavMeshAgent.isStopped = false;
             _Animator.SetBool(CanAttack, false);
             
             var colliders = new Collider[1];

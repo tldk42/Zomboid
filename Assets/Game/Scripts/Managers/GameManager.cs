@@ -16,7 +16,7 @@ namespace Game.Scripts.Managers
 
         private void Start()
         {
-            SoundManager.Instance.PlayBGM("artic");
+            SoundManager.Instance.PlayBGM("africa");
         }
     }
 }
