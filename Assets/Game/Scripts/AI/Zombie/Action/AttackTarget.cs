@@ -5,13 +5,6 @@ namespace Game.Scripts.AI.Zombie.Action
 {
     public class AttackTarget : Node
     {
-        #region 애니메이션 캐시 변수
-        
-        private static readonly int ShouldMove = Animator.StringToHash("ShouldMove");
-        private static readonly int CanAttack = Animator.StringToHash("CanAttack");
-
-        #endregion
-        
         #region 필수 변수
 
         private readonly Zombie _Owner;
@@ -39,7 +32,7 @@ namespace Game.Scripts.AI.Zombie.Action
                 return State;
             }
             
-            _Animator.SetBool(CanAttack, true);
+            _Animator.SetBool(Action.CanAttack, true);
             // _Animator.SetBool(ShouldMove, false);
 
             State = NodeState.ENS_SUCCESS;

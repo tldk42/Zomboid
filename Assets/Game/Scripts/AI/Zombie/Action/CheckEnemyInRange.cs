@@ -5,13 +5,6 @@ namespace Game.Scripts.AI.Zombie.Action
 {
     public class CheckEnemyInRange : Node
     {
-        #region 애니메이션 캐시 변수
-
-        private static readonly int ShouldMove = Animator.StringToHash("ShouldMove");
-        private static readonly int CanAttack = Animator.StringToHash("CanAttack");
-
-        #endregion
-
         #region 필수 변수
 
         private readonly Zombie _Owner;
@@ -37,8 +30,10 @@ namespace Game.Scripts.AI.Zombie.Action
 
         public override NodeState Evaluate()
         {
+            
             _Owner.NavMeshAgent.isStopped = false;
-            _Animator.SetBool(CanAttack, false);
+            _Animator.SetBool(Action.ShouldMove, true);
+            _Animator.SetBool(Action.CanAttack, false);
             
             var colliders = new Collider[1];
 
@@ -73,8 +68,6 @@ namespace Game.Scripts.AI.Zombie.Action
             Parent.Parent.SetData("Target", colliders[0].transform);
             _Owner.State = ZombieState.EZS_RECOGNIZED;
             _Owner.TargetData = colliders[0].transform;
-            _Animator.SetBool(ShouldMove, true);
-            _Animator.SetBool(CanAttack, false);
             State = NodeState.ENS_SUCCESS;
             return State;
         }

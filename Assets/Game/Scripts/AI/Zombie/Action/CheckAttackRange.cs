@@ -6,12 +6,6 @@ namespace Game.Scripts.AI.Zombie.Action
 {
     public class CheckAttackRange : Node
     {
-        #region 애니메이션 캐시 변수
-
-        private static readonly int ShouldMove = Animator.StringToHash("ShouldMove");
-
-        #endregion
-
         #region 필수 변수
 
         private readonly Zombie _Owner;
@@ -40,13 +34,16 @@ namespace Game.Scripts.AI.Zombie.Action
             }
 
             Vector3 targetPosition = ((Transform)targetPlayer).position;
-
-            if (Vector2.Distance(new Vector2(_Transform.position.x, _Transform.position.z), new Vector2(targetPosition.x, targetPosition.z)) <= _Owner.Data.AttackRange + float.Epsilon)
+            var distance = Vector2.Distance(new Vector2(_Transform.position.x, _Transform.position.z), new Vector2(targetPosition.x, targetPosition.z));
+            if (distance <= _Owner.Data.AttackRange + 2.0f)
             {
+                if (distance <= _Owner.Data.AttackRange)
+                    _Animator.SetBool(Action.ShouldMove, false);
+                else
+                    _Animator.SetBool(Action.ShouldMove, true);
                 State = NodeState.ENS_SUCCESS;
                 return State;
             }
-
             State = NodeState.ENS_FAILURE;
             return State;
         }
