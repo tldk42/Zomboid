@@ -34,7 +34,8 @@ namespace Game.Scripts.AI.Zombie.Action
             }
 
             Vector3 targetPosition = ((Transform)targetPlayer).position;
-            var distance = Vector2.Distance(new Vector2(_Transform.position.x, _Transform.position.z), new Vector2(targetPosition.x, targetPosition.z));
+            Vector3 position = _Transform.position;
+            var distance = Vector2.Distance(new Vector2(position.x, position.z), new Vector2(targetPosition.x, targetPosition.z));
             if (distance <= _Owner.Data.AttackRange + 2.0f)
             {
                 if (distance <= _Owner.Data.AttackRange)

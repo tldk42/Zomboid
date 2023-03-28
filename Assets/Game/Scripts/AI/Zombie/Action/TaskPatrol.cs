@@ -5,11 +5,6 @@ namespace Game.Scripts.AI.Zombie.Action
 {
     public class TaskPatrol : Node
     {
-        #region 애니메이션 캐시 변수
-
-        private static readonly int ShouldMove = Animator.StringToHash("ShouldMove");
-
-        #endregion
 
         #region 필수 변수
 
@@ -24,7 +19,7 @@ namespace Game.Scripts.AI.Zombie.Action
         #region 속성
 
         private int _CurrentWaypointIndex = 0;
-        private float _WaitTime = 1f;
+        private float _WaitTime = 3f;
         private float _WaitCounter = 0f;
         private bool _IsWaiting;
 
@@ -52,27 +47,26 @@ namespace Game.Scripts.AI.Zombie.Action
                 {
                     _Owner.NavMeshAgent.isStopped = false;
                     _IsWaiting = false;
-                    _Animator.SetBool(ShouldMove, true);
+                    _Animator.SetBool(Action.ShouldMove, true);
                 }
             }
             else
             {
                 Vector3 waypointPosition = _WayPoints[_CurrentWaypointIndex].position;
-                if (Vector3.Distance(_Transform.position, waypointPosition) <= _Owner.NavMeshAgent.stoppingDistance)
+                if (Vector3.Distance(new Vector3(_Transform.position.x, waypointPosition.y, _Transform.position.z), waypointPosition) <= _Owner.NavMeshAgent.stoppingDistance)
                 {
-                    // _Transform.position = waypointPosition;
                     _Owner.NavMeshAgent.isStopped = true;
                     _WaitCounter = 0f;
                     _IsWaiting = true;
 
                     _CurrentWaypointIndex = (_CurrentWaypointIndex + 1) % _WayPoints.Length;
 
-                    _Animator.SetBool(ShouldMove, false);
+                    _Animator.SetBool(Action.ShouldMove, false);
                 }
                 else
                 {
                     _Owner.NavMeshAgent.SetDestination(waypointPosition);
-                    _Animator.SetBool(ShouldMove, true);
+                    _Animator.SetBool(Action.ShouldMove, true);
                     _Transform.LookAt(new Vector3(waypointPosition.x, _Transform.position.y, waypointPosition.z)
                     );
                 }

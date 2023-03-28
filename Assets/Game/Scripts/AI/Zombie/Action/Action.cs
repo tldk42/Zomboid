@@ -7,6 +7,7 @@ namespace Game.Scripts.AI.Zombie.Action
 
         public static readonly int ShouldMove = Animator.StringToHash("ShouldMove");
         public static readonly int CanAttack = Animator.StringToHash("CanAttack");
+        public static readonly int FoundPlayer = Animator.StringToHash("FoundPlayer");
 
         #endregion
     }

@@ -32,9 +32,8 @@ namespace Game.Scripts.AI.Zombie.Action
         {
             
             _Owner.NavMeshAgent.isStopped = false;
-            _Animator.SetBool(Action.ShouldMove, true);
             _Animator.SetBool(Action.CanAttack, false);
-            
+
             var colliders = new Collider[1];
 
             Physics.OverlapSphereNonAlloc(_Owner.SensorTransform.position, _Owner.Data.FOVRange, colliders,
@@ -64,7 +63,13 @@ namespace Game.Scripts.AI.Zombie.Action
                 State = NodeState.ENS_FAILURE;
                 return State;
             }
-            
+
+            if (_Owner.State == ZombieState.EZS_PATROLLING)
+            {
+                _Animator.SetBool(Action.ShouldMove, true);
+                _Animator.SetTrigger(Action.FoundPlayer);
+            }
+
             Parent.Parent.SetData("Target", colliders[0].transform);
             _Owner.State = ZombieState.EZS_RECOGNIZED;
             _Owner.TargetData = colliders[0].transform;
