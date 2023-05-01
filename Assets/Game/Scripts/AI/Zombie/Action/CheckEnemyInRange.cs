@@ -67,7 +67,6 @@ namespace Game.Scripts.AI.Zombie.Action
             if (_Owner.State == ZombieState.EZS_PATROLLING)
             {
                 _Animator.SetBool(Action.ShouldMove, true);
-                _Animator.SetTrigger(Action.FoundPlayer);
             }
 
             Parent.Parent.SetData("Target", colliders[0].transform);

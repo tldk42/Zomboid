@@ -39,9 +39,10 @@ namespace Game.Scripts.AI.Zombie
                             new CheckAttackRange(transform),
                             new AttackTarget(transform)
                         }),
-                        new Sequence(new List<Node>     
+                        new Sequence(new List<Node>
                         {
                             new CheckEnemyInRange(transform),
+                            new Wait(transform, 1.6f),
                             new ChaseTarget(transform),
                         })
                     }),
