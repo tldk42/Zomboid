@@ -33,7 +33,6 @@ namespace Game.Scripts.AI.Zombie.Action
             }
             
             _Animator.SetBool(Action.CanAttack, true);
-            // _Animator.SetBool(ShouldMove, false);
 
             State = NodeState.ENS_SUCCESS;
             return State;
