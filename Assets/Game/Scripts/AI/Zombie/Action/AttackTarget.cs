@@ -8,18 +8,14 @@ namespace Game.Scripts.AI.Zombie.Action
         #region 필수 변수
 
         private readonly Zombie _Owner;
-        private readonly Animator _Animator;
 
-        private readonly Transform _Transform;
         private readonly Transform[] _WayPoints;
 
         #endregion
         
-        public AttackTarget(Transform transform) : base()
+        public AttackTarget(Zombie owner) : base()
         {
-            _Transform = transform;
-            _Owner = transform.GetComponent<ZombieBT>().Owner;
-            _Animator = transform.GetComponent<Animator>();
+            _Owner = owner;
         }
 
         public override NodeState Evaluate()
@@ -32,7 +28,7 @@ namespace Game.Scripts.AI.Zombie.Action
                 return State;
             }
             
-            _Animator.SetBool(Action.CanAttack, true);
+            _Owner.Animator.SetTrigger(Action.CanAttack);
 
             State = NodeState.ENS_SUCCESS;
             return State;

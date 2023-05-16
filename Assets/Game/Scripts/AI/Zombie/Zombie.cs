@@ -1,8 +1,6 @@
 using Game.Scripts.ScriptableObject;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using Object = UnityEngine.Object;
 
 namespace Game.Scripts.AI.Zombie
 {
@@ -19,15 +17,16 @@ namespace Game.Scripts.AI.Zombie
         public ZombieData Data;
         public Transform SensorTransform;
         public NavMeshAgent NavMeshAgent;
+        public Animator Animator;
         public ZombieState State;
 
-        [SerializeField, ReadOnly, InspectorName("타켓")]
-        public Transform TargetData;
+        public event System.Action<ZombieState> ZombieStateChanged;
 
         private void Awake()
         {
             Data = Resources.Load<ZombieData>("Zombie");
             NavMeshAgent = GetComponent<NavMeshAgent>();
+            Animator = GetComponent<Animator>();
         }
 
         private void OnDrawGizmos()
@@ -49,6 +48,11 @@ namespace Game.Scripts.AI.Zombie
             Data.Hp = 0;
             NavMeshAgent.isStopped = true;
             State = ZombieState.EZS_DEAD;
+        }
+
+        protected virtual void OnZombieStateChanged(ZombieState obj)
+        {
+            ZombieStateChanged?.Invoke(obj);
         }
     }
 }

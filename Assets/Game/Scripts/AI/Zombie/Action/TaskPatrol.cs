@@ -5,11 +5,9 @@ namespace Game.Scripts.AI.Zombie.Action
 {
     public class TaskPatrol : Node
     {
-
         #region 필수 변수
 
         private readonly Zombie _Owner;
-        private readonly Animator _Animator;
 
         private readonly Transform _Transform;
         private readonly Transform[] _WayPoints;
@@ -25,11 +23,10 @@ namespace Game.Scripts.AI.Zombie.Action
 
         #endregion
 
-        public TaskPatrol(Transform transform, Transform[] wayPoints) : base()
+        public TaskPatrol(Zombie owner, Transform[] wayPoints) : base()
         {
-            _Owner = transform.GetComponent<ZombieBT>().Owner;
-            _Animator = transform.GetComponent<Animator>();
-            _Transform = transform;
+            _Owner = owner;
+            _Transform = owner.transform;
             _WayPoints = wayPoints;
         }
 
@@ -40,6 +37,9 @@ namespace Game.Scripts.AI.Zombie.Action
          */
         public override NodeState Evaluate()
         {
+            _Owner.Data.Speed = 0.5f;
+            _Owner.NavMeshAgent.speed = _Owner.Data.Speed;
+            _Owner.Animator.SetBool(Action.FoundPlayer, false);
             if (_IsWaiting)
             {
                 _WaitCounter += Time.deltaTime;
@@ -47,13 +47,14 @@ namespace Game.Scripts.AI.Zombie.Action
                 {
                     _Owner.NavMeshAgent.isStopped = false;
                     _IsWaiting = false;
-                    _Animator.SetBool(Action.ShouldMove, true);
+                    _Owner.Animator.SetBool(Action.ShouldMove, true);
                 }
             }
             else
             {
                 Vector3 waypointPosition = _WayPoints[_CurrentWaypointIndex].position;
-                if (Vector3.Distance(new Vector3(_Transform.position.x, waypointPosition.y, _Transform.position.z), waypointPosition) <= _Owner.NavMeshAgent.stoppingDistance)
+                if (Vector3.Distance(new Vector3(_Transform.position.x, waypointPosition.y, _Transform.position.z),
+                        waypointPosition) <= _Owner.NavMeshAgent.stoppingDistance)
                 {
                     _Owner.NavMeshAgent.isStopped = true;
                     _WaitCounter = 0f;
@@ -61,12 +62,12 @@ namespace Game.Scripts.AI.Zombie.Action
 
                     _CurrentWaypointIndex = (_CurrentWaypointIndex + 1) % _WayPoints.Length;
 
-                    _Animator.SetBool(Action.ShouldMove, false);
+                    _Owner.Animator.SetBool(Action.ShouldMove, false);
                 }
                 else
                 {
                     _Owner.NavMeshAgent.SetDestination(waypointPosition);
-                    _Animator.SetBool(Action.ShouldMove, true);
+                    _Owner.Animator.SetBool(Action.ShouldMove, true);
                     _Transform.LookAt(new Vector3(waypointPosition.x, _Transform.position.y, waypointPosition.z)
                     );
                 }

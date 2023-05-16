@@ -13,7 +13,7 @@ namespace Game.Scripts.AI.BT.Core
         }
 
         /** 매 프레임 자식 노드들을 evaluate */
-        private void Update()
+        protected virtual void Update()
         {
             _Root?.Evaluate();
         }

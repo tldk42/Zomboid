@@ -8,9 +8,6 @@ namespace Game.Scripts.AI.Zombie.Action
         #region 필수 변수
 
         private readonly Zombie _Owner;
-        private readonly Animator _Animator;
-
-        private readonly Transform _Transform;
 
         #endregion
 
@@ -21,18 +18,15 @@ namespace Game.Scripts.AI.Zombie.Action
         #endregion
 
 
-        public CheckEnemyInRange(Transform transform) : base()
+        public CheckEnemyInRange(Zombie owner) : base()
         {
-            _Owner = transform.GetComponent<ZombieBT>().Owner;
-            _Animator = transform.GetComponent<Animator>();
-            _Transform = transform;
+             _Owner = owner;
         }
 
         public override NodeState Evaluate()
         {
             
             _Owner.NavMeshAgent.isStopped = false;
-            _Animator.SetBool(Action.CanAttack, false);
 
             var colliders = new Collider[1];
 
@@ -44,13 +38,13 @@ namespace Game.Scripts.AI.Zombie.Action
             {
                 _Owner.State = ZombieState.EZS_PATROLLING;
                 Parent.Parent.SetData("Target", null);
-                _Owner.TargetData = null;
                 State = NodeState.ENS_FAILURE;
                 return State;
             }
             
             if (_Owner.State == ZombieState.EZS_RECOGNIZED)
             {
+                _Owner.Animator.SetBool(Action.FoundPlayer, true);
                 State = NodeState.ENS_SUCCESS;
                 return State;
             }
@@ -66,12 +60,11 @@ namespace Game.Scripts.AI.Zombie.Action
 
             if (_Owner.State == ZombieState.EZS_PATROLLING)
             {
-                _Animator.SetBool(Action.ShouldMove, true);
+                _Owner.Animator.SetBool(Action.ShouldMove, true);
             }
 
             Parent.Parent.SetData("Target", colliders[0].transform);
             _Owner.State = ZombieState.EZS_RECOGNIZED;
-            _Owner.TargetData = colliders[0].transform;
             State = NodeState.ENS_SUCCESS;
             return State;
         }

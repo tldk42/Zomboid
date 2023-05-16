@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Game.Scripts.AI.BT.Core;
 using Game.Scripts.AI.Zombie.Action;
 using Sirenix.OdinInspector;
@@ -7,10 +6,8 @@ using UnityEngine;
 
 namespace Game.Scripts.AI.Zombie
 {
-    public class ZombieBT : BehaviorTree
+    public class ZombieBT : BaseBT
     {
-        public Zombie Owner { get; private set; }
-
 
         [Title("경로 설정")] [SerializeField, SceneObjectsOnly, GUIColor(0.37f, 0.52f, 0.64f, 1f)]
         public Transform[] WayPoints;
@@ -30,24 +27,25 @@ namespace Game.Scripts.AI.Zombie
 
         protected override Node SetupTree()
         {
+            Transform transform1 = transform;
             Node root = new Selector(new List<Node>
                 {
                     new Selector(new List<Node>
                     {
                         new Sequence(new List<Node>
                         {
-                            new CheckAttackRange(transform),
-                            new AttackTarget(transform)
+                            new CheckAttackRange(Owner),
+                            new AttackTarget(Owner)
                         }),
                         new Sequence(new List<Node>
                         {
-                            new CheckEnemyInRange(transform),
-                            new Wait(transform, 1.6f),
-                            new ChaseTarget(transform),
+                            new CheckEnemyInRange(Owner),
+                            new Wait(Owner, 1.6f),
+                            new ChaseTarget(Owner),
                         })
                     }),
 
-                    new TaskPatrol(transform, WayPoints),
+                    new TaskPatrol(Owner, WayPoints),
                 }
             );
             return root;

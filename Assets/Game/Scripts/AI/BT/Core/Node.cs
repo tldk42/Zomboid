@@ -27,7 +27,7 @@ namespace Game.Scripts.AI.BT.Core
         /** 부모 및 자식 노드 */
         [HideInInspector]public Node Parent;
 
-        protected List<Node> Children = new List<Node>();
+        [NonSerialized]protected List<Node> Children = new List<Node>();
 
         /** 이 노드의 추가 정보 (Target등) */
         private SerializableDictionary<string, object> _DataContext = new SerializableDictionary<string, object>();
